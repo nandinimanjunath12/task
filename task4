@@ -1,0 +1,60 @@
+// Function to print border line
+fun printBorder() {
+    println("==============================================")
+}
+
+// Function to print logo section
+fun printLogo() {
+    printBorder()
+    println("|                                            |")
+    println("|              ★ ANDROID DEV ★              |")
+    println("|                                            |")
+    printBorder()
+}
+
+// Function to print header section (Name + Title)
+fun printHeader(name: String, title: String) {
+    println("| Name  : $name")
+    println("| Title : $title")
+    println("|--------------------------------------------")
+}
+
+// Function to print contact section
+fun printContact(phone: String, email: String, website: String) {
+    println("| Contact Information:")
+    println("| Phone   : $phone")
+    println("| Email   : $email")
+    println("| Website : $website")
+    printBorder()
+}
+
+// Main function
+fun main() {
+
+    println("==== Business Card Generator ====\n")
+
+    // Taking user input
+    print("Enter Name: ")
+    val name = readLine() ?: ""
+
+    print("Enter Title: ")
+    val title = readLine() ?: ""
+
+    print("Enter Phone: ")
+    val phone = readLine() ?: ""
+
+    print("Enter Email: ")
+    val email = readLine() ?: ""
+
+    print("Enter Website: ")
+    val website = readLine() ?: ""
+
+    println("\n===== Your Business Card =====\n")
+
+    // Calling reusable functions
+    printLogo()
+    printHeader(name, title)
+    printContact(phone, email, website)
+
+    println("\nBusiness Card Created Successfully!")
+}
