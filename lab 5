@@ -1,0 +1,100 @@
+data class Contact(
+    val name: String,
+    val phone: String,
+    val email: String?,
+    val isFavorite: Boolean
+)
+
+fun printBorder() {
+    println("========================================")
+}
+
+fun displayContact(contact: Contact) {
+    println("Name      : ${contact.name}")
+    println("Phone     : ${contact.phone}")
+    println("Email     : ${contact.email ?: "No Email"}")
+    println("Favorite  : ${if (contact.isFavorite) "Yes" else "No"}")
+    printBorder()
+}
+
+fun filterContacts(
+    contacts: List<Contact>,
+    condition: (Contact) -> Boolean
+): List<Contact> {
+    return contacts.filter(condition)
+}
+
+fun displayContacts(list: List<Contact>) {
+    if (list.isEmpty()) {
+        println("No contacts found.")
+        return
+    }
+
+    for (contact in list) {
+        displayContact(contact)
+    }
+}
+
+fun main() {
+
+    val contacts = mutableListOf<Contact>()
+
+    mainLoop@ while (true) {
+
+        printBorder()
+        println("Contact Manager")
+        printBorder()
+        println("1. Add Contact")
+        println("2. View All Contacts")
+        println("3. View Favorite Contacts")
+        println("4. View Contacts With Email")
+        println("5. Exit")
+        print("Choose option: ")
+
+        when (readLine()) {
+
+            "1" -> {
+                print("Enter Name: ")
+                val name = readLine() ?: ""
+
+                print("Enter Phone: ")
+                val phone = readLine() ?: ""
+
+                print("Enter Email (or leave blank): ")
+                val emailInput = readLine()
+                val email = if (emailInput.isNullOrBlank()) null else emailInput
+
+                print("Is Favorite? (yes/no): ")
+                val favInput = readLine()?.toLowerCase()
+                val isFavorite = favInput == "yes"
+
+                contacts.add(Contact(name, phone, email, isFavorite))
+                println("Contact Added Successfully!")
+            }
+
+            "2" -> {
+                println("\nAll Contacts:")
+                displayContacts(contacts)
+            }
+
+            "3" -> {
+                println("\nFavorite Contacts:")
+                val favorites = filterContacts(contacts) { it.isFavorite }
+                displayContacts(favorites)
+            }
+
+            "4" -> {
+                println("\nContacts With Email:")
+                val withEmail = filterContacts(contacts) { it.email != null }
+                displayContacts(withEmail)
+            }
+
+            "5" -> {
+                println("Exiting Contact Manager.")
+                break@mainLoop   // ✅ Correct way
+            }
+
+            else -> println("Invalid Option. Try Again.")
+        }
+    }
+}
