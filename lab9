@@ -1,0 +1,90 @@
+// Generic Inventory Class
+class Inventory<T : Item>(private val items: MutableList<T>) {
+
+    // Add new item
+    fun addItem(item: T) {
+        items.add(item)
+    }
+
+    // Display all items
+    fun displayAll() {
+        println("\n--- All Inventory Items ---")
+        for (item in items) {
+            println(item)
+        }
+    }
+
+    // Filter items that are in stock
+    fun filterInStock(): List<T> {
+        return items.filter { it.quantity > 0 }
+    }
+
+    // Filter items by category
+    fun filterByCategory(category: String): List<T> {
+        return items.filter { 
+            it.category.equals(category, ignoreCase = true) 
+        }
+    }
+
+    // Compute total value per category (Compatible with older Kotlin)
+    fun categoryTotals(): Map<String, Double> {
+        val result = mutableMapOf<String, Double>()
+
+        for (item in items) {
+            val currentTotal = result.getOrDefault(item.category, 0.0)
+            result[item.category] =
+                currentTotal + (item.price * item.quantity)
+        }
+
+        return result
+    }
+}
+
+// Base Item class
+open class Item(
+    val name: String,
+    val category: String,
+    val price: Double,
+    val quantity: Int
+) {
+    override fun toString(): String {
+        return "Name: $name | Category: $category | Price: $price | Quantity: $quantity"
+    }
+}
+
+// Main function
+fun main() {
+
+    val inventory = Inventory<Item>(mutableListOf())
+
+    // Adding sample items
+    inventory.addItem(Item("Laptop", "Electronics", 60000.0, 5))
+    inventory.addItem(Item("Mouse", "Electronics", 500.0, 0))
+    inventory.addItem(Item("Chair", "Furniture", 2500.0, 10))
+    inventory.addItem(Item("Desk", "Furniture", 7000.0, 2))
+    inventory.addItem(Item("Notebook", "Stationery", 50.0, 100))
+
+    // Display all items
+    inventory.displayAll()
+
+    // Filter items in stock
+    println("\n--- Items In Stock ---")
+    val inStock = inventory.filterInStock()
+    for (item in inStock) {
+        println(item)
+    }
+
+    // Filter by category
+    println("\n--- Electronics Category ---")
+    val electronics = inventory.filterByCategory("Electronics")
+    for (item in electronics) {
+        println(item)
+    }
+
+    // Display category totals
+    println("\n--- Category Total Values ---")
+    val totals = inventory.categoryTotals()
+    for ((category, totalValue) in totals) {
+        println("$category Total Value: $totalValue")
+    }
+}
