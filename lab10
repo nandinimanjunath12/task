@@ -1,0 +1,75 @@
+// Data class representing a product
+data class Product(
+    val name: String,
+    val category: String,
+    val price: Double,
+    val inStock: Boolean
+)
+
+// Generic Product Analyzer
+class ProductAnalyzer<T : Product>(private val products: List<T>) {
+
+    // Apply dynamic discount using higher-order function
+    fun applyDiscount(discountStrategy: (Double) -> Double): List<T> {
+        return products.map { product ->
+            product.copy(price = discountStrategy(product.price)) as T
+        }
+    }
+
+    // Filter products using lambda condition
+    fun filterProducts(condition: (T) -> Boolean): List<T> {
+        return products.filter(condition)
+    }
+
+    // Format product details neatly
+    fun formatProducts(items: List<T>) {
+        println("\n--- Product List ---")
+        for (product in items) {
+            println(
+                String.format(
+                    "Name: %-15s | Category: %-12s | Price: %.2f | In Stock: %s",
+                    product.name,
+                    product.category,
+                    product.price,
+                    if (product.inStock) "Yes" else "No"
+                )
+            )
+        }
+    }
+}
+
+fun main() {
+
+    val productList = listOf(
+        Product("Laptop", "Electronics", 60000.0, true),
+        Product("Headphones", "Electronics", 2000.0, true),
+        Product("Shoes", "Fashion", 3000.0, false),
+        Product("Watch", "Fashion", 5000.0, true),
+        Product("Book", "Education", 500.0, true)
+    )
+
+    val analyzer = ProductAnalyzer(productList)
+
+    // Display all products
+    analyzer.formatProducts(productList)
+
+    // Apply 10 percent discount dynamically
+    val discountedProducts = analyzer.applyDiscount { price ->
+        price * 0.9
+    }
+
+    println("\n--- After 10 Percent Discount ---")
+    analyzer.formatProducts(discountedProducts)
+
+    // Filter products above 3000
+    val premiumProducts = analyzer.filterProducts { it.price > 3000 }
+
+    println("\n--- Premium Products (Price > 3000) ---")
+    analyzer.formatProducts(premiumProducts)
+
+    // Filter products that are in stock
+    val availableProducts = analyzer.filterProducts { it.inStock }
+
+    println("\n--- Available Products ---")
+    analyzer.formatProducts(availableProducts)
+}
