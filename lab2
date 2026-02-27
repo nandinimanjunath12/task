@@ -1,0 +1,95 @@
+// Data class to store user information data class UserProfile( val name: String, val age: Int, val email: String, val showAvatar: Boolean )
+
+// Function to print a border line fun printBorder() { println("========================================") }
+
+// Function to print avatar box fun printAvatar(name: String) { printBorder() println("| |") println("| ${name.first().toUpperCase()} |") println("| |") printBorder() }
+
+// Function to display one profile fun displayProfile(user: UserProfile, index: Int) { printBorder() println("User Profile #$index") printBorder() println("Name : 
+u
+s
+e
+r
+.
+n
+a
+m
+e
+"
+)
+p
+r
+i
+n
+t
+l
+n
+(
+"
+A
+g
+e
+:
+{user.age}") println("Email : ${user.email}")
+
+if (user.showAvatar) {
+    println("\nAvatar:")
+    printAvatar(user.name)
+}
+
+printBorder()
+println()
+}
+
+fun main() {
+
+println("==== User Profile Console Program ====")
+
+// Input validation for number of users
+var numberOfUsers: Int
+
+print("Enter number of users: ")
+while (true) {
+    val input = readLine()
+    val parsed = input?.toIntOrNull()
+
+    if (parsed != null && parsed > 0) {
+        numberOfUsers = parsed
+        break
+    } else {
+        print("Please enter a valid number greater than 0: ")
+    }
+}
+
+val userList = mutableListOf<UserProfile>()
+
+// Collect user data
+for (i in 1..numberOfUsers) {
+
+    println("\nEnter details for User $i")
+
+    print("Name: ")
+    val name = readLine() ?: ""
+
+    print("Age: ")
+    val age = readLine()?.toIntOrNull() ?: 0
+
+    print("Email: ")
+    val email = readLine() ?: ""
+
+    print("Show avatar? (yes/no): ")
+    val avatarInput = readLine()?.toLowerCase()
+    val showAvatar = avatarInput == "yes"
+
+    userList.add(UserProfile(name, age, email, showAvatar))
+}
+
+println("\n===== Displaying Profiles =====")
+
+var index = 1
+for (user in userList) {
+    displayProfile(user, index)
+    index++
+}
+
+println("Program Ended Successfully.")
+}
