@@ -1,0 +1,58 @@
+data class Artwork(
+    val title: String,
+    val artist: String,
+    val year: Int,
+    val description: String
+)
+
+fun displayArtwork(artwork: Artwork) {
+    println("\n--- Artwork Details ---")
+    println("Title: ${artwork.title}")
+    println("Artist: ${artwork.artist}")
+    println("Year: ${artwork.year}")
+    println("Description: ${artwork.description}")
+    println("------------------------")
+}
+
+fun nextIndex(currentIndex: Int, size: Int): Int {
+    return (currentIndex + 1) % size
+}
+
+fun previousIndex(currentIndex: Int, size: Int): Int {
+    return (currentIndex - 1 + size) % size
+}
+
+fun main() {
+
+    val gallery = listOf(
+        Artwork("Mona Lisa", "Leonardo da Vinci", 1503, "A portrait with a mysterious smile."),
+        Artwork("Starry Night", "Vincent van Gogh", 1889, "A swirling night sky over a quiet town."),
+        Artwork("The Persistence of Memory", "Salvador Dali", 1931, "Melting clocks in a desert landscape."),
+        Artwork("The Scream", "Edvard Munch", 1893, "Expression of anxiety and fear.")
+    )
+
+    var currentIndex = 0
+    var running = true
+
+    println("Welcome to the Console Art Gallery!")
+
+    while (running) {
+
+        displayArtwork(gallery[currentIndex])
+
+        println("\nChoose an option:")
+        println("1. Next")
+        println("2. Previous")
+        println("3. Exit")
+
+        when (readLine()?.trim()) {
+            "1" -> currentIndex = nextIndex(currentIndex, gallery.size)
+            "2" -> currentIndex = previousIndex(currentIndex, gallery.size)
+            "3" -> {
+                println("Exiting gallery. Goodbye!")
+                running = false
+            }
+            else -> println("Invalid choice. Please try again.")
+        }
+    }
+}
