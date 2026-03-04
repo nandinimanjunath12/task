@@ -1,0 +1,144 @@
+import java.util.Scanner
+
+// ----------------------
+// Data class for Theme
+// ----------------------
+data class Theme(
+    val name: String,
+    val backgroundColor: String,
+    val textColor: String,
+    val accentSymbol: Char
+) {
+    fun displayThemeInfo() {
+        println("Theme Applied -> $name")
+        println("Background: $backgroundColor | Text: $textColor")
+    }
+
+    fun decorate(text: String): String {
+        return "$accentSymbol $text $accentSymbol"
+    }
+
+    companion object {
+        const val DEFAULT_PROGRESS_MAX = 30
+    }
+}
+
+// ----------------------
+// Theme Manager
+// ----------------------
+class ThemeManager(private val themes: List<Theme>) {
+
+    fun showThemeMenu() {
+        println()
+        println("Available Themes:")
+        themes.forEachIndexed { index, theme ->
+            println("${index + 1}. ${theme.name}")
+        }
+        println("0. Exit")
+        print("Select a theme: ")
+    }
+
+    fun getThemeByChoice(choice: Int): Theme {
+        return if (choice in 1..themes.size) {
+            themes[choice - 1]
+        } else {
+            themes[0]
+        }
+    }
+}
+
+// ----------------------
+// Progress Bar Simulator
+// ----------------------
+class ProgressBar(private val max: Int = Theme.DEFAULT_PROGRESS_MAX) {
+
+    fun animate(theme: Theme) {
+        println(theme.decorate("Starting Progress"))
+
+        for (i in 0..max) {
+            val percent = (i * 100) / max
+            val bar = buildBar(i)
+            print("\r$bar $percent%")
+            Thread.sleep(50)
+        }
+
+        println()
+        println(theme.decorate("Completed"))
+    }
+
+    private fun buildBar(progress: Int): String {
+        val filled = "#".repeat(progress)
+        val empty = "-".repeat(max - progress)
+        return "[$filled$empty]"
+    }
+}
+
+// ----------------------
+// Main App Controller
+// ----------------------
+class ThemeConsoleApp {
+
+    private val scanner = Scanner(System.`in`)
+
+    private val themes = listOf(
+        Theme("Light", "White", "Black", '*'),
+        Theme("Dark", "Black", "White", '#'),
+        Theme("Ocean", "Blue", "Cyan", '~'),
+        Theme("Forest", "Green", "Brown", '+')
+    )
+
+    private val manager = ThemeManager(themes)
+    private val progressBar = ProgressBar()
+
+    fun run() {
+        println("=== Theme Switcher and Progress Simulator ===")
+
+        while (true) {
+            manager.showThemeMenu()
+
+            val choice = readSafeInt()
+
+            // ✅ SAFE handling (NO lambda break)
+            if (choice == null) {
+                println("No valid input detected. Running demo mode with default theme.")
+                val theme = themes[0]
+                theme.displayThemeInfo()
+                progressBar.animate(theme)
+                break
+            }
+
+            if (choice == 0) {
+                println("Exiting application.")
+                break
+            }
+
+            val selectedTheme = manager.getThemeByChoice(choice)
+            selectedTheme.displayThemeInfo()
+            progressBar.animate(selectedTheme)
+        }
+    }
+
+    // ----------------------
+    // SAFE INPUT READER
+    // ----------------------
+    private fun readSafeInt(): Int? {
+        return try {
+            if (scanner.hasNextInt()) {
+                scanner.nextInt()
+            } else {
+                scanner.next() // clear invalid token
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+}
+
+// ----------------------
+// Main Function
+// ----------------------
+fun main() {
+    val app = ThemeConsoleApp()
+    app.run()
+}
