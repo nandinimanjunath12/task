@@ -1,0 +1,89 @@
+// Data class representing a Superhero
+data class Superhero(
+    val name: String,
+    val power: String,
+    val mission: String
+)
+
+// Object responsible for catalog operations
+object SuperheroCatalog {
+
+    // Function to display a single hero in readable format
+    fun displayHero(hero: Superhero) {
+        println("--------------------------------------------------")
+        println("HERO NAME : ${hero.name}")
+        println("POWER     : ${hero.power}")
+        println("MISSION   : ${hero.mission}")
+        println("--------------------------------------------------")
+    }
+
+    // Function to display all heroes
+    fun displayAllHeroes(heroes: List<Superhero>) {
+        println("\n========== SUPERHERO CATALOG ==========")
+
+        if (heroes.isEmpty()) {
+            println("No heroes available in the catalog.")
+            return
+        }
+
+        heroes.forEachIndexed { index, hero ->
+            println("\nHero #${index + 1}")
+            displayHero(hero)
+        }
+
+        println("\nTotal Heroes: ${heroes.size}")
+        println("========================================")
+    }
+
+    // Function to filter heroes by keyword in power
+    fun filterByPower(heroes: List<Superhero>, keyword: String): List<Superhero> {
+        return heroes.filter {
+            it.power.contains(keyword, ignoreCase = true)
+        }
+    }
+}
+
+// Main function
+fun main() {
+
+    // Create list of superheroes
+    val heroes = listOf(
+        Superhero(
+            name = "Astra Blaze",
+            power = "Fire Manipulation",
+            mission = "Protect cities from volcanic disasters"
+        ),
+        Superhero(
+            name = "Wave Rider",
+            power = "Water Control",
+            mission = "Rescue ships during ocean storms"
+        ),
+        Superhero(
+            name = "Mind Spark",
+            power = "Telepathy",
+            mission = "Prevent global cyber crimes"
+        ),
+        Superhero(
+            name = "Terra Guard",
+            power = "Earth Strength",
+            mission = "Defend natural resources"
+        )
+    )
+
+    // Display full catalog
+    SuperheroCatalog.displayAllHeroes(heroes)
+
+    // Demonstrate filtering feature
+    println("\n=== FILTER: Heroes with 'Water' power ===")
+    val filteredHeroes = SuperheroCatalog.filterByPower(heroes, "Water")
+
+    if (filteredHeroes.isEmpty()) {
+        println("No heroes found with the specified power.")
+    } else {
+        filteredHeroes.forEach {
+            SuperheroCatalog.displayHero(it)
+        }
+    }
+
+    println("\nProgram completed successfully.")
+}
