@@ -1,0 +1,72 @@
+// ===== Interface =====
+interface PerformAction {
+    fun performAction()
+}
+
+// ===== Abstract Class =====
+abstract class Animal(
+    val name: String,
+    val age: Int
+) : PerformAction {
+
+    fun displayInfo() {
+        println("Animal Name: $name, Age: $age")
+    }
+
+    abstract fun makeSound()
+}
+
+// ===== Lion Class =====
+class Lion(name: String, age: Int) : Animal(name, age) {
+
+    override fun makeSound() {
+        println("$name roars loudly.")
+    }
+
+    override fun performAction() {
+        println("$name is hunting in the enclosure.")
+    }
+}
+
+// ===== Elephant Class =====
+class Elephant(name: String, age: Int) : Animal(name, age) {
+
+    override fun makeSound() {
+        println("$name makes a trumpet sound.")
+    }
+
+    override fun performAction() {
+        println("$name sprays water using its trunk.")
+    }
+}
+
+// ===== Parrot Class =====
+class Parrot(name: String, age: Int) : Animal(name, age) {
+
+    override fun makeSound() {
+        println("$name chirps.")
+    }
+
+    override fun performAction() {
+        println("$name mimics human words.")
+    }
+}
+
+// ===== Main Function =====
+fun main() {
+
+    val zooAnimals: List<Animal> = listOf(
+        Lion("Leo", 5),
+        Elephant("Ella", 10),
+        Parrot("Polly", 2)
+    )
+
+    println("=== Zoo Animal Tracker ===\n")
+
+    for (animal in zooAnimals) {
+        animal.displayInfo()
+        animal.makeSound()
+        animal.performAction()
+        println("---------------------------")
+    }
+}
